@@ -17,7 +17,7 @@ local cpuAnimate = function(time,widthArg,cpuArg,name,obj)
 				local tempCpu = (cpuArg/0.5) * (tonumber(string.format("%6.2f",(newTime - oldTime))))
 				self.bg:SetSize(tempWidth,14)
 				self.bg:SetVertexColor(GUI:ColorGradient(tempColor,0,1,0, 1,1,0, 1,0,0))
-				self.addonName:SetText(format("%s : %s",name,tempCpu <= 2048 and math.ceil(tempCpu).."kb" or "大于2M"))
+				self.addonName:SetText(format("%s : %s",name,tempCpu <= 2048 and math.ceil(tempCpu).."kb" or " > 2M"))
 			else
 				self:SetScript("OnUpdate",nil)
 			end
