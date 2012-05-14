@@ -1,11 +1,11 @@
 ﻿## Interface: 40300
 ## Author: susnow@NGA
 ## Title: MemoryUseage
-## Title-zhCN: 查看占用
-## Title-zhTW: 查看佔用
+## Title-zhCN: 占用排行榜
+## Title-zhTW: 佔用排行榜
 ## Notes: View your memory useage with animates
-## Notes-zhCN: 占用排行榜
-## Notes-zhTW: 佔用排行榜
+## Notes-zhCN: 动态显示插件内存占用
+## Notes-zhTW: 動態顯示插件內存佔用
 
 widget.lua
 core.lua
