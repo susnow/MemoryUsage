@@ -5,7 +5,7 @@ local GUI = ns.GUI
 
 GUI:New()
 
-local cpuAnimate = function(time,widthArg,cpuArg,name,kb,obj)
+local cpuAnimate = function(time,widthArg,cpuArg,name,obj)
 	local oldTime = time or GetTime()
 	obj:SetScript("OnUpdate",function(self,elapsed)
 		self.nextUpdate = self.nextUpdate + elapsed
@@ -35,14 +35,14 @@ local hideAnimate = function(obj)
 			if newTime - oldTime < 0.2 then
 				local tempScale = (1/0.2) * (tonumber(string.format("%6.2f",(newTime - oldTime)))) + 1
 				local tempAlpha = 1 - (1/0.2) * tonumber(string.format("%6.2f",(newTime - oldTime)))
-				obj:SetScale(tempScale)
-				obj:SetAlpha(tempAlpha)
+				self:SetScale(tempScale)
+				self:SetAlpha(tempAlpha)
 			else
-				obj:SetScale(2)
-				obj:SetAlpha(0)
-				obj:SetPoint("CENTER",UIParent,150,0)
-				obj:Hide()
-				obj:SetScript("OnUpdate",nil)
+				self:SetScale(2)
+				self:SetAlpha(0)
+				self:SetPoint("CENTER",UIParent,150,0)
+				self:Hide()
+				self:SetScript("OnUpdate",nil)
 			end
 		end
 		self.nextUpdate = 0
@@ -102,7 +102,7 @@ _G["MemoryUseageMainFrame"]:SetScript("OnShow",function(self)
 			if title == nil then
 				title = v.name
 			end
-			cpuAnimate(GetTime(),500*width,v.mem,title,v.mem,self.addonmems[k])
+			cpuAnimate(GetTime(),500*width,v.mem,title,self.addonmems[k])
 		else
 			return
 		end
