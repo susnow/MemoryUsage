@@ -7,7 +7,5 @@
 ## Notes-zhCN: 占用排行榜
 ## Notes-zhTW: 佔用排行榜
 
-
-addonlist.lua
 widget.lua
 core.lua

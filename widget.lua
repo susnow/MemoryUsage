@@ -1,4 +1,4 @@
-﻿--Susnow
+﻿--susnow
 
 local addon,ns = ...
 local texFile = "Interface\\Buttons\\WHITE8X8"

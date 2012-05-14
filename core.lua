@@ -1,9 +1,7 @@
 ﻿--susnow
 
 local addon,ns = ...
-local AL = ns.AL -- addonlist
 local GUI = ns.GUI
-
 
 GUI:New()
 
@@ -77,19 +75,20 @@ local function sortMemName(a,b)
 	return a.mem > b.mem
 end
 
-local cpus = {}
+local addons = {}
 
 _G["MemoryUseageMainFrame"]:SetScript("OnShow",function(self)
 	self:SetScale(1)
 	showAnimate(self)
-	for k, v in pairs(AL) do
-		if IsAddOnLoaded(k) then
-			local mem = GetAddOnMemoryUsage(k)
-			table.insert(cpus,{name = k, mem = math.ceil(mem)})
+	for i = 1, GetNumAddOns() do
+		local name,title,enabled,loadable,reason,security = GetAddOnInfo(i)
+		if enabled and not GetAddOnMetadata(name,"RequiredDeps") then
+			local mem = GetAddOnMemoryUsage(name)
+			table.insert(addons,{name = name, mem = math.ceil(mem)})	
 		end
 	end
-	table.sort(cpus,sortMemName)
-	for k, v in pairs(cpus) do
+	table.sort(addons,sortMemName)
+	for k, v in pairs(addons) do
 		local width  = 1
 		if v.mem < 2048 then
 			width = v.mem/2048	
@@ -99,7 +98,11 @@ _G["MemoryUseageMainFrame"]:SetScript("OnShow",function(self)
 		if k <= 20 then
 			self.addonmems[k]:Show()
 			self.addonmems[k].index:SetText(k)
-			cpuAnimate(GetTime(),500*width,v.mem,AL[v.name][GetLocale()],v.mem,self.addonmems[k])
+			local title = GetAddOnMetadata(v.name,"Title-"..GetLocale())
+			if title == nil then
+				title = v.name
+			end
+			cpuAnimate(GetTime(),500*width,v.mem,title,v.mem,self.addonmems[k])
 		else
 			return
 		end
@@ -120,7 +123,7 @@ _G["MemoryUseageMainFrame"]:SetScript("OnKeyDown",function(self,key)
 end)
 
 _G["MemoryUseageMainFrame"]:SetScript("OnHide",function(self)
-	table.wipe(cpus)
+	table.wipe(addons)
 	for i = 1, #self.addonmems do
 		local button = self.addonmems[i]
 		button:Hide()
