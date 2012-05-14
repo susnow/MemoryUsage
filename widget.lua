@@ -9,6 +9,7 @@ local GUI = CreateFrame("Frame")
 
 function GUI:New()
 	local f = CreateFrame("Frame","MemoryUseageMainFrame",UIParent)
+	f.nextUpdate = 0
 	f:SetSize(600,550)
 	f:SetBackdrop(bgTex)
 	f:SetBackdropColor(.1,.1,.1,.5)
@@ -89,7 +90,6 @@ function GUI:New()
 		bg:SetVertexColor(GUI:ColorGradient(i*0.004, 0,1,0, 1,1,0, 1,0,0))
 		bg:SetPoint("TOPLEFT",f.tip,(i-1)*1,0)
 	end
-
 	f:Hide()
 end
 

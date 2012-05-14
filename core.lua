@@ -28,6 +28,51 @@ local cpuAnimate = function(time,widthArg,cpuArg,name,kb,obj)
 	end)
 end
 
+local hideAnimate = function(obj)
+	local oldTime = GetTime()
+	obj:SetScript("OnUpdate",function(self,elapsed)
+		self.nextUpdate = self.nextUpdate + elapsed
+		if self.nextUpdate > 0.0001 then
+			local newTime = GetTime()
+			if newTime - oldTime < 0.2 then
+				local tempScale = (1/0.2) * (tonumber(string.format("%6.2f",(newTime - oldTime)))) + 1
+				local tempAlpha = 1 - (1/0.2) * tonumber(string.format("%6.2f",(newTime - oldTime)))
+				obj:SetScale(tempScale)
+				obj:SetAlpha(tempAlpha)
+			else
+				obj:SetScale(2)
+				obj:SetAlpha(0)
+				obj:SetPoint("CENTER",UIParent,150,0)
+				obj:Hide()
+				obj:SetScript("OnUpdate",nil)
+			end
+		end
+		self.nextUpdate = 0
+	end)
+end
+
+local showAnimate = function(obj)
+	local oldTime = GetTime()
+	obj:SetScript("OnUpdate",function(self,elapsed)
+		self.nextUpdate = self.nextUpdate + elapsed
+		if self.nextUpdate > 0.0001 then
+			local newTime = GetTime()
+			if newTime - oldTime < 0.2 then
+				local tempOffset = (150/0.2) * (tonumber(string.format("%6.2f",(newTime - oldTime))))
+				local tempAlpha = 1/0.2 * (tonumber(string.format("%6.2f",(newTime - oldTime))))
+				self:SetPoint("CENTER",UIParent,150-tempOffset,0)
+				self:SetAlpha(tempAlpha)
+			else
+				self:SetPoint("CENTER",UIParent)
+				self:SetAlpha(1)
+				self:SetScript("OnUpdate",nil)
+			end
+			self.nextUpdate = 0
+		end
+	end)
+end
+
+
 local function sortMemName(a,b)
 	return a.mem > b.mem
 end
@@ -35,6 +80,8 @@ end
 local cpus = {}
 
 _G["MemoryUseageMainFrame"]:SetScript("OnShow",function(self)
+	self:SetScale(1)
+	showAnimate(self)
 	for k, v in pairs(AL) do
 		if IsAddOnLoaded(k) then
 			local mem = GetAddOnMemoryUsage(k)
@@ -59,6 +106,18 @@ _G["MemoryUseageMainFrame"]:SetScript("OnShow",function(self)
 	end
 end)
 
+_G["MemoryUseageMainFrame"]:EnableKeyboard(true)
+
+_G["MemoryUseageMainFrame"]:SetScript("OnKeyDown",function(self,key)
+	if key == "ESCAPE" then
+		hideAnimate(self)
+	elseif key == "ENTER" then
+		ChatFrame1EditBox:Show()
+		ChatFrame1EditBox:SetFocus()
+	elseif key == "PRINTSCREEN" then
+		Screenshot()
+	end
+end)
 
 _G["MemoryUseageMainFrame"]:SetScript("OnHide",function(self)
 	table.wipe(cpus)
